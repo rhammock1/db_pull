@@ -3,10 +3,11 @@
 
 # TODO 
 # refactor code to increase reusability
-# since this will run as cron job, add function to drop all databases from the prev week and create fresh ones for the new week
 
 DIR=$1
 DB_NAME=""
+PREV_DB=`date -v-7d +%m_%d_%y` # date formatted to match last weeks database name
+TEMPLATES=('node_env_1' 'node_env_2' 'node_env_3')
 FORCE=""
 
 if [[ $2 == --force ]]; then
@@ -16,6 +17,12 @@ fi
 
 getAllNames() {
   psql -lt | cut -d \| -f 1
+}
+
+dropAllPrevDB() {
+  echo "Dropping week of $1 databases: "
+  dropIfDBExists 'node_$1' # drop the database used as a template
+  getAllNames | grep 'node_env' | while read line ; do echo "$line" ; dropdb $line ; done # drop all database created from template
 }
 
 dropIfDBExists() {
@@ -28,7 +35,7 @@ dropIfDBExists() {
         exit
       fi
     fi
-    echo "Dropping old database... "
+    echo "Dropping $1 database... "
     dropdb $1
   fi
 }
@@ -56,10 +63,11 @@ createNew() {
   dropIfTooMany
 
   if [[ $2 ]]; then # if 2nd argument, then use 1st as template
+    dropIfDBExists $2
     echo "Creating new database named $2 with template $1"
     createdb -T $1 $2
   else
-    dropIfDBExists $1 # database will already exist if we are trying to use it as a template
+    dropIfDBExists $1
     echo "Creating new database with name: $1"
     createdb $1
   fi
@@ -71,9 +79,11 @@ if [ -z $FORCE ]; then
 fi
 
 if [ -z "$DB_NAME" ] ; then
-  echo "No database name entered. Creating based on date"
+  echo "Creating database name based on date"
   DB_NAME="node_$(date +%m_%d_%y)" # formats new name as node_MM_DD_YY
 fi
+
+dropAllPrevDB $PREV_DB
 
 createNew $DB_NAME
 
@@ -86,4 +96,6 @@ echo "Clearing Production payment credentials from new db"
 # clear prod payment credientials from the new db
 psql -d $DB_NAME -f $HOME/clear_prod_payment.sql
 
-createNew $DB_NAME 'node_env_1' # create new database with template
+for str in ${TEMPLATES[@]}; do
+  createNew $DB_NAME $str # create new databases with template
+done
