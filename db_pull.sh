@@ -21,7 +21,7 @@ getAllNames() {
 
 dropAllPrevDB() {
   echo "Dropping week of $1 databases: "
-  dropIfDBExists 'node_$1' # drop the database used as a template
+  dropIfDBExists "node_$1" # drop the database used as a template
   getAllNames | grep 'node_env' | while read line ; do echo "$line" ; dropdb $line ; done # drop all database created from template
 }
 
