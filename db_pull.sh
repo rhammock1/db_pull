@@ -1,14 +1,21 @@
 #!/bin/bash
-# commands may be commented out for testing. Dont forget to remove them!
+# commands may be commented out for testing FINDME
 
 # TODO 
 # refactor code to increase reusability
+# create a test script to add a comment to the beginning of each line containing "# FINDME"
+# then run the db_pull script and output its content to the log file
 
 DIR=$1
 DB_NAME=""
 PREV_DB=`date -v-7d +%m_%d_%y` # date formatted to match last weeks database name
 TEMPLATES=('node_env_1' 'node_env_2' 'node_env_3')
+LOG=$HOME/cron.log # log output file when run as cron job
 FORCE=""
+
+if [ -f $LOG ]; then # clear previous content of log file
+  > $LOG
+fi
 
 if [[ $2 == --force ]]; then
   echo "Forcing script execution"
@@ -22,7 +29,10 @@ getAllNames() {
 dropAllPrevDB() {
   echo "Dropping week of $1 databases: "
   dropIfDBExists "node_$1" # drop the database used as a template
-  getAllNames | grep 'node_env' | while read line ; do echo "$line" ; dropdb $line ; done # drop all database created from template
+  getAllNames | grep 'node_env' | while read line ; # drop all database created from template
+    do echo "$line" ; 
+    dropdb $line ;  # FINDME - comment out for testing
+    done 
 }
 
 dropIfDBExists() {
@@ -36,7 +46,7 @@ dropIfDBExists() {
       fi
     fi
     echo "Dropping $1 database... "
-    dropdb $1
+    dropdb $1 # FINDME - comment out for testing
   fi
 }
 
@@ -55,7 +65,7 @@ dropIfTooMany() {
       fi
     fi
     echo "Dropping $DB_DROP database... "
-    dropdb $DB_DROP 
+    dropdb $DB_DROP # FINDME - comment out for testing
   fi
 }
 
@@ -65,11 +75,11 @@ createNew() {
   if [[ $2 ]]; then # if 2nd argument, then use 1st as template
     dropIfDBExists $2
     echo "Creating new database named $2 with template $1"
-    createdb -T $1 $2
+    createdb -T $1 $2 # FINDME - comment out for testing
   else
     dropIfDBExists $1
     echo "Creating new database with name: $1"
-    createdb $1
+    createdb $1 # FINDME - comment out for testing
   fi
 }
 
@@ -88,13 +98,13 @@ dropAllPrevDB $PREV_DB
 createNew $DB_NAME
 
 echo "Executing command -> bash $DIR postgres://localhost/$DB_NAME --most --force"
-bash $DIR postgres://localhost/$DB_NAME --most --force
+bash $DIR postgres://localhost/$DB_NAME --most --force # FINDME - comment out for testing
 
 echo -e "\n\n\n PG PULL is complete \n\n\n"
 echo "Clearing Production payment credentials from new db"
 
 # clear prod payment credientials from the new db
-psql -d $DB_NAME -f $HOME/clear_prod_payment.sql
+psql -d $DB_NAME -f $HOME/clear_prod_payment.sql # FINDME - comment out for testing
 
 for str in ${TEMPLATES[@]}; do
   createNew $DB_NAME $str # create new databases with template
