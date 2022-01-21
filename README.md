@@ -1,12 +1,19 @@
 # DATABASE PULL
 
 This script will run as a cron job, 6:45am every Monday. 
-Output of cron job can be output to log file `cron.log`. Make sure to create the file first
+
+Included is a test script which will prepend a `#` to each line containing `# FINDME`
+then run the script without triggering any major commands
 
 ## Example Usage
 
 ``` bash
-./db_pull.sh $HOME/project/bin/pg_pull --force
+bash db_pull.sh $HOME/project/bin/pg_pull --force
+```
+
+No arguments needed
+``` bash
+bash test_pull.sh
 ```
 
 ## Command Line Arguments

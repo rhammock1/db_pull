@@ -3,19 +3,12 @@
 
 # TODO 
 # refactor code to increase reusability
-# create a test script to add a comment to the beginning of each line containing "# FINDME"
-# then run the db_pull script and output its content to the log file
 
 DIR=$1
 DB_NAME=""
 PREV_DB=`date -v-7d +%m_%d_%y` # date formatted to match last weeks database name
 TEMPLATES=('node_env_1' 'node_env_2' 'node_env_3')
-LOG=$HOME/cron.log # log output file when run as cron job
 FORCE=""
-
-if [ -f $LOG ]; then # clear previous content of log file
-  > $LOG
-fi
 
 if [[ $2 == --force ]]; then
   echo "Forcing script execution"
