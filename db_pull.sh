@@ -1,5 +1,4 @@
 #!/bin/bash
-# commands may be commented out for testing FINDME
 
 # TODO 
 # refactor code to increase reusability
