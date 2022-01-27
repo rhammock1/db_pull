@@ -7,7 +7,7 @@
 DIR=$1
 DB_NAME=""
 PREV_DB=`date -v-7d +%m_%d_%y` # date formatted to match last weeks database name
-TEMPLATES=('node_env_1' 'node_env_2' 'node_env_3')
+# TEMPLATES=('node_env_1' 'node_env_2' 'node_env_3') three of these is memory expensive ~40gb each
 FORCE=""
 
 if [[ $2 == --force ]]; then
@@ -82,7 +82,7 @@ if [ -z $FORCE ]; then
 fi
 
 if [ -z "$DB_NAME" ] ; then
-  echo "Creating database name based on date"
+  echo "Creating database name based on date of $(date +%m_%d_%y)"
   DB_NAME="node_$(date +%m_%d_%y)" # formats new name as node_MM_DD_YY
 fi
 
@@ -99,6 +99,4 @@ echo "Clearing Production payment credentials from new db"
 # clear prod payment credientials from the new db
 psql -d $DB_NAME -f $HOME/clear_prod_payment.sql # FINDME - comment out for testing
 
-for str in ${TEMPLATES[@]}; do
-  createNew $DB_NAME $str # create new databases with template
-done
+createNew $DB_NAME 'node_env_1' # create new databases with template

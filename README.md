@@ -3,7 +3,7 @@
 This script will run as a cron job, 6:45am every Monday. 
 
 Included is a test script which will prepend a `#` to each line containing `# FINDME`
-then run the script without triggering any major commands
+then run the script without triggering any major commands. Some echo may run more then once when they shouldn't because the drop database commands aren't running.
 
 ## Example Usage
 
