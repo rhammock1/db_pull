@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# TODO 
+# TODO
 # refactor code to increase reusability
 
 DIR=$1
@@ -22,9 +22,9 @@ dropAllPrevDB() {
   echo "Dropping week of $1 databases: "
   dropIfDBExists "node_$1" # drop the database used as a template
   getAllNames | grep 'node_env' | while read line ; # drop all database created from template
-    do echo "$line" ; 
+    do echo "$line" ;
     dropdb $line ;  # FINDME - comment out for testing
-    done 
+    done
 }
 
 dropIfDBExists() {
@@ -99,3 +99,6 @@ echo "Clearing Production payment credentials from new db"
 psql -d $DB_NAME -f $HOME/clear_prod_payment.sql # FINDME - comment out for testing
 
 createNew $DB_NAME 'node_env_1' # create new databases with template
+
+# Text me to tell me everything is complete
+osascript -e "tell application \"Messages\" to send \"Database pull complete, Boss.\nIt's all ready for ya!\" to buddy \"$PHONE\""
