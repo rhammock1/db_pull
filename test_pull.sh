@@ -5,10 +5,10 @@ echo $__dir
 > $__dir/pull.log
 
 # Find all lines matching '# FINDME' and prepend a # to the line
-sed -e '/# FINDME/s/^/#/' $__dir/db_pull.sh >> temp.sh
+sed -e '/# FINDME/s/^/#/' $__dir/db_pull.sh >> $__dir/temp.sh
 
 # test the script w/o any big commands running
-bash temp.sh ./ --force >> $__dir/pull.log
+bash $__dir/temp.sh ./ --force >> $__dir/pull.log
 
 # cleanup
-rm temp.sh
+rm $__dir/temp.sh

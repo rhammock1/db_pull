@@ -8,6 +8,7 @@ DB_NAME=""
 PREV_DB=`date -v-7d +%m_%d_%y` # date formatted to match last weeks database name
 # TEMPLATES=('node_env_1' 'node_env_2' 'node_env_3') three of these is memory expensive ~40gb each
 FORCE=""
+echo $(date)
 
 if [[ $2 == --force ]]; then
   echo "Forcing script execution"
@@ -92,7 +93,7 @@ createNew $DB_NAME
 echo "Executing command -> bash $DIR postgres://localhost/$DB_NAME --most --force"
 bash $DIR postgres://localhost/$DB_NAME --most --force # FINDME - comment out for testing
 
-echo -e "\n\n\n PG PULL is complete \n\n\n"
+echo -e "\n\n\n  PG PULL is complete \n\n\n"
 echo "Clearing Production payment credentials from new db"
 
 # clear prod payment credientials from the new db
