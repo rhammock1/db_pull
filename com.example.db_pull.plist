@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>com.example.dbpull</string>
+    <key>ProgramArguments</key>
+    <array>
+      <string>/Users/user/scripts/db_pull/db_pull.sh</string>
+      <string>/Users/user/path/to/bin/pg_pull</string>
+      <string>--force</string>
+    </array>
+    <key>EnvironmentVariables</key>
+    <dict>
+      <key>PATH</key>
+      <string>/usr/local/bin:/usr/bin:/bin:/Applications/Postgres.app/Contents/Versions/latest/bin</string>
+      <key>PHONE</key>
+      <string>1234567890</string>
+    </dict>
+    <key>WorkingDirectory</key>
+    <string>/Users/user/scripts/db_pull</string>
+    <key>StartCalendarInterval</key>
+    <dict>
+      <key>Hour</key>
+      <integer>5</integer>
+      <key>Minute</key>
+      <integer>0</integer>
+      <key>Weekday</key>
+      <integer>1</integer>
+    </dict>
+    <key>StandardOutPath</key>
+    <string>pull.log</string>
+    <key>LimitLoadToSessionType</key>
+    <string>Aqua</string>
+  </dict>
+</plist>

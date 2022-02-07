@@ -5,6 +5,10 @@ This script will run as a cron job, 5 am every Monday. Had to include the `PATH`
 Because Apple has depreciated Cron on Mac, I have decided to change and use `Launchctl`. 
 With launchctl, the message letting me know the db_pull is complete is actually sent.
 
+To run this as a Launchctl Agent, move `com.example.db_pull.plist` to `~/Library/LaunchAgents/`. Make sure to update the appropriate fields first! The Agent should automatically load, but if not (or if changes are made) run `launchctl unload ~/Library/LaunchAgents/com.example.db_pull.plist` then `launchctl load ~/Library/LaunchAgents/com.example.db_pull.plist`
+
+More details on Launchctl [here](https://launchd.info/)
+
 ```
 PATH="/usr/local/bin:/usr/bin:/bin:/Applications/Postgres.app/Contents/Versions/latest/bin"
 0 5 * * 1 bash $HOME/db_pull/db_pull.sh <path-to-pg-pull-script> --force

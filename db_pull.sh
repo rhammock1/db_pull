@@ -99,7 +99,14 @@ echo "Clearing Production payment credentials from new db"
 # clear prod payment credientials from the new db
 psql -d $DB_NAME -f $HOME/clear_prod_payment.sql # FINDME - comment out for testing
 
-createNew $DB_NAME 'node_env_1' # create new databases with template
+# create new databases with template
+createNew $DB_NAME 'node_env_1'
+
+# Don't delete this until the end just in case it's needed during the pg_pull
+dropIfDBExists 'node_ice'
+
+# In Case of Emergency
+createNew $DB_NAME 'node_ice'
 
 # Text me to tell me everything is complete
 osascript -e "tell application \"Messages\" to send \"Database pull complete, Boss.\nIt's all ready for ya!\" to buddy \"$PHONE\""
