@@ -4,7 +4,10 @@
 # refactor code to increase reusability
 # Add check to make sure psql is running 
 
-DIR=$1
+__dir="$(cd "$(dirname "$0")" && pwd)" # get the directory of this script
+echo $__dir
+
+PG_PULL_DIR=$1
 DB_NAME=""
 PREV_DB=`date -v-7d +%m_%d_%y` # date formatted to match last weeks database name
 # TEMPLATES=('node_env_1' 'node_env_2' 'node_env_3') three of these is memory expensive ~40gb each
@@ -92,13 +95,13 @@ dropAllPrevDB $PREV_DB
 createNew $DB_NAME
 
 echo "Executing command -> bash $DIR postgres://localhost/$DB_NAME --most --force"
-bash $DIR postgres://localhost/$DB_NAME --most --force # FINDME - comment out for testing
+bash $PG_PULL_DIR postgres://localhost/$DB_NAME --most --force # FINDME - comment out for testing
 
 echo -e "\n\n\n  PG PULL is complete \n\n\n"
 echo "Clearing Production payment credentials from new db"
 
 # clear prod payment credientials from the new db
-psql -d $DB_NAME -f $HOME/clear_prod_payment.sql # FINDME - comment out for testing
+psql -d $DB_NAME -f __dir/clear_prod_payment.sql # FINDME - comment out for testing
 
 # create new databases with template
 createNew $DB_NAME 'node_env_1'
