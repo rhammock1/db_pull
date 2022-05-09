@@ -101,7 +101,7 @@ echo -e "\n\n\n  PG PULL is complete \n\n\n"
 echo "Clearing Production payment credentials from new db"
 
 # clear prod payment credientials from the new db
-psql -d $DB_NAME -f __dir/clear_prod_payment.sql # FINDME - comment out for testing
+psql -d $DB_NAME -f $__dir/clear_prod_payment.sql # FINDME - comment out for testing
 
 # create new databases with template
 createNew $DB_NAME 'node_env_1'
