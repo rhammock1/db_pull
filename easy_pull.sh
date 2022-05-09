@@ -1,0 +1,1 @@
+./db_pull.sh $HOME/gotab/node/bin/pg_pull --force

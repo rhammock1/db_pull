@@ -2,6 +2,7 @@
 
 # TODO
 # refactor code to increase reusability
+# Add check to make sure psql is running 
 
 DIR=$1
 DB_NAME=""
@@ -102,6 +103,7 @@ psql -d $DB_NAME -f $HOME/clear_prod_payment.sql # FINDME - comment out for test
 # create new databases with template
 createNew $DB_NAME 'node_env_1'
 
+# TODO Check for active connections to the ICE db
 # Don't delete this until the end just in case it's needed during the pg_pull
 dropIfDBExists 'node_ice'
 
@@ -110,3 +112,4 @@ createNew $DB_NAME 'node_ice'
 
 # Text me to tell me everything is complete
 osascript -e "tell application \"Messages\" to send \"Database pull complete, Boss.\nIt's all ready for ya!\" to buddy \"$PHONE\""
+echo "Message should have been sent to $PHONE"
