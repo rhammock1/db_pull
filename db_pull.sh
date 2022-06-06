@@ -90,6 +90,11 @@ if [ -z "$DB_NAME" ] ; then
   DB_NAME="node_$(date +%m_%d_%y)" # formats new name as node_MM_DD_YY
 fi
 
+# if [ $(psql -c 'SELECT pid FROM pg_stat_activity WHERE state = \'active\' AND datname = ANY(\'{node_env_1,node_ice,node_"$PREV_DB"}\');') ] ; then
+#   echo "There is a database connection still open. Please close it before running this script."
+#   exit 1
+# fi
+
 dropAllPrevDB $PREV_DB
 
 createNew $DB_NAME
@@ -116,3 +121,4 @@ createNew $DB_NAME 'node_ice'
 # Text me to tell me everything is complete
 osascript -e "tell application \"Messages\" to send \"Database pull complete, Boss.\nIt's all ready for ya!\" to buddy \"$PHONE\""
 echo "Message should have been sent to $PHONE"
+echo "Completed at $(date)"
