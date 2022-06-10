@@ -29,7 +29,7 @@
       <integer>1</integer>
     </dict>
     <key>StandardOutPath</key>
-    <string>pull.log</string>
+    <string>logs/pull.log</string>
     <key>LimitLoadToSessionType</key>
     <string>Aqua</string>
   </dict>
