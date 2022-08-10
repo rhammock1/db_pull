@@ -1,3 +1,4 @@
 logs/
-sql/
+sql/clear_prod_payment.sql
+sql/integration_setup.sql
 easy_pull.sh

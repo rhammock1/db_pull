@@ -23,10 +23,18 @@ More details on Launchctl [here](https://launchd.info/)
 Included is a test script which will prepend a `#` to each line containing `# FINDME`
 then run the script without triggering any major commands. Some echo may run more then once when they shouldn't because the drop database commands aren't running.
 
+
+## SETUP
+* Create a `logs/` folder in the root of this project and touch `logs/pull.log` - This will be .gitignored
+* If you'd like it to clear production payment details- create `sql/clear_prod_payment.sql`
+* If working on an integration- create `sql/integration_setup.sql`
+* Edit `com.example.db_pull.plist` with your specific values
+* Move `com.example.db_pull.plist` to `~/Library/LaunchAgents/`.
+
 ## Example Usage
 
 ``` bash
-bash db_pull.sh $HOME/project/bin/pg_pull --force
+bash db_pull.sh $HOME/project/bin/pg_pull --force --integration
 ```
 
 No arguments needed
@@ -39,7 +47,12 @@ bash test_pull.sh
 * `PG_PULL_DIR`
   * File path to the script that actually pulls the new database
 
-### Second
+### [Second]
 * `--force`
   * skips all prompts and forces script to run all commands
   * this script does drop and create new databases. Use this flag carefully
+
+### [Third]
+* `--integration`
+  * Runs sql/integration_setup.sql if it exists
+  * Used if needing a large database setup for a project

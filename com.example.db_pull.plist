@@ -29,7 +29,9 @@
       <integer>1</integer>
     </dict>
     <key>StandardOutPath</key>
-    <string>logs/pull.log</string>
+    <string>logs/launchout.log</string>
+    <key>StandardErrorPath</key>
+    <string>logs/launch_err.log</string>
     <key>LimitLoadToSessionType</key>
     <string>Aqua</string>
   </dict>
