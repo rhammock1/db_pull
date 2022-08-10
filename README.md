@@ -13,6 +13,7 @@ With launchctl, the message letting me know the db_pull is complete is actually 
 
 The LaunchAgent won't run if your computer is asleep.
 Don't forget to update Mac `System Preferences` to wake your computer at a specific time.
+Computer must be plugged in to follow set wake-up time.
 
 To run this as a Launchctl Agent, move `com.example.db_pull.plist` to `~/Library/LaunchAgents/`. This is your user's collection of LaunchAgents. In the future it may be good to move to root? <br />
 <b>Make sure to update the appropriate fields first!</b> <br />
@@ -28,6 +29,9 @@ then run the script without triggering any major commands. Some echo may run mor
 * Create a `logs/` folder in the root of this project and touch `logs/pull.log` - This will be .gitignored
 * If you'd like it to clear production payment details- create `sql/clear_prod_payment.sql`
 * If working on an integration- create `sql/integration_setup.sql`
+
+-- If running as an agent
+* Update System Preferences to wake the computer at specific time
 * Edit `com.example.db_pull.plist` with your specific values
 * Move `com.example.db_pull.plist` to `~/Library/LaunchAgents/`.
 
