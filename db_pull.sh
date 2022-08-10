@@ -12,7 +12,7 @@ echo $__dir
 > $__dir/logs/pull.log
 
 # Output all standard output to the log file
-exec >> $__dir/logs/pull.log
+exec 2> $__dir/logs/pull.log
 
 PG_PULL_DIR=$1
 DB_NAME=""
