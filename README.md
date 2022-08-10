@@ -26,6 +26,7 @@ then run the script without triggering any major commands. Some echo may run mor
 
 
 ## SETUP
+* Don't forget to `chmomd +x *.sh` ? (Tbh I don't know, atm, if you have to do this...)
 * Create a `logs/` folder in the root of this project and touch `logs/pull.log` - This will be .gitignored
 * If you'd like it to clear production payment details- create `sql/clear_prod_payment.sql`
 * If working on an integration- create `sql/integration_setup.sql`
