@@ -45,7 +45,12 @@ getAllNames() {
 
 dropAllPrevDB() {
   echo "Dropping week of $1 databases: "
-  dropIfDBExists "node_$1" # drop the database used as a template
+  # drop all databases that match the date format MM_DD_YY
+  getAllNames | grep -E '(node_)\d{2}_\d{2}_\d{2}' | while read line; # drop the database used as a template
+    do echo "$line" ;
+    dropdb $line ; # FINDME - comment out for testing
+    done
+
   getAllNames | grep 'node_env' | while read line ; # drop all database created from template
     do echo "$line" ;
     dropdb $line ;  # FINDME - comment out for testing
