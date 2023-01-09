@@ -16,8 +16,6 @@ exec 2> $__dir/logs/pull.log
 
 PG_PULL_DIR=$1
 DB_NAME=""
-PREV_DB=`date -v-7d +%m_%d_%y` # date formatted to match last weeks database name
-# TEMPLATES=('node_env_1' 'node_env_2' 'node_env_3') three of these is memory expensive ~75gb each
 FORCE=""
 INTEGRATION=false
 echo $(date)
@@ -44,7 +42,7 @@ getAllNames() {
 }
 
 dropAllPrevDB() {
-  echo "Dropping week of $1 databases: "
+  echo "Dropping previously used databases: "
   # drop all databases that match the date format MM_DD_YY
   getAllNames | grep -E '(node_)\d{2}_\d{2}_\d{2}' | while read line; # drop the database used as a template
     do echo "$line" ;
@@ -117,7 +115,7 @@ if [ -z "$DB_NAME" ] ; then
   DB_NAME="node_$(date +%m_%d_%y)" # formats new name as node_MM_DD_YY
 fi
 
-dropAllPrevDB $PREV_DB
+dropAllPrevDB
 
 createNew $DB_NAME
 
