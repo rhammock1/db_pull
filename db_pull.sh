@@ -17,7 +17,7 @@ exec 2> $__dir/logs/pull.log
 PG_PULL_DIR=$1
 DB_NAME=""
 PREV_DB=`date -v-7d +%m_%d_%y` # date formatted to match last weeks database name
-# TEMPLATES=('node_env_1' 'node_env_2' 'node_env_3') three of these is memory expensive ~40gb each
+# TEMPLATES=('node_env_1' 'node_env_2' 'node_env_3') three of these is memory expensive ~75gb each
 FORCE=""
 INTEGRATION=false
 echo $(date)
@@ -124,27 +124,25 @@ PULL_PID=$!
 wait $PULL_PID
 
 getErrorLine() {
-  grep 'errors ignored on restore:' logs/test_pull.log
+  grep 'errors ignored on restore:' logs/pull.log
 }
 
 # read contents of logs/pull.log and find line containing "errors ignored on restore:"
 # recent pulls have given 22 errors when successful
-error_line=$(getErrorLine)
 number_of_errors=$(getErrorLine | grep -o -E '[0-9]+')
-echo "errors: $number_of_errors --- $error_line"
-# FIXME - output stops being logged after CREATE TYPE during the pull
-# if [[ -z $(getErrorLine) ]]; then
-#   echo "Didn't find the error check line. It's likely that the pull was unsuccessful."
-#   echo "Not going to continue. Please check logs/pull.log"
-#   exit 1
-# elif [[ $number_of_errors -gt 22 ]]; then
-#   echo "There were more errors than expected."
-#   echo "Not going to continue trying. Please check logs/pull.log"
-#   exit 1
-# else
-#   echo -e "\n\n\n  PG PULL is complete \n\n\n"
-# fi
-echo -e "\n\n\n  PG PULL is complete \n\n\n"
+echo "errors: $number_of_errors"
+
+if [[ -z $(getErrorLine) ]]; then
+  echo "Didn't find the error check line. It's likely that the pull was unsuccessful."
+  echo "Not going to continue. Please check logs/pull.log"
+  exit 1
+elif [[ $number_of_errors -gt 30 ]]; then
+  echo "There were more errors than expected."
+  echo "Not going to continue trying. Please check logs/pull.log"
+  exit 1
+else
+  echo -e "\n\n\n  PG PULL is complete \n\n\n"
+fi
 
 # Clear prod payment credientials from the new db
 if [ -f "$__dir/sql/clear_prod_payment.sql" ]; then
