@@ -8,7 +8,7 @@ echo $__dir
 sed -e '/# FINDME/s/^/#/' $__dir/db_pull.sh >> $__dir/temp.sh
 
 # test the script w/o any big commands running
-bash $__dir/temp.sh ./ --force --integration >> $__dir/logs/test_pull.log
+bash $__dir/temp.sh --repo ./ --force --integration --clear-branch-db >> $__dir/logs/test_pull.log
 
 # cleanup
 rm $__dir/temp.sh

@@ -14,27 +14,33 @@ echo $__dir
 # Output all standard output to the log file
 exec 2> $__dir/logs/pull.log
 
-REPO_PATH=$1
+REPO_PATH=""
 DB_NAME=""
 FORCE=""
 INTEGRATION=false
 CLEAR_BRANCH_DATABASES=false
 echo $(date)
 
-if [[ $2 == --force ]]; then
-  echo "Forcing script execution"
-  FORCE="y"
-fi
-
-if [[ $3 == --integration ]]; then
-  echo "Going to setup new DB based on contents of 'sql/integration_setup.sql'"
-  INTEGRATION=true
-fi
-
-if [[ $4 == --clear-branch-db ]]; then
-  echo "Going to clear all databases that match git branch names"
-  CLEAR_BRANCH_DATABASES=true
-fi
+while test $# -gt 0
+do
+  case "$1" in
+    --repo | -r) REPO_PATH=$2 && echo "Using repo path: $REPO_PATH"
+      ;;
+    --integration | -i) INTEGRATION=true && echo "Going to setup new DB based on contents of 'sql/integration_setup.sql'"
+      ;;
+    --force | -f) FORCE=true && echo "Forcing script execution"
+      ;;
+    --clear-branch-db | -c) CLEAR_BRANCH_DATABASES=true && echo "Going to clear all databases that match git branch names"
+      ;;
+    --help | -h) echo "Pending..."
+      exit 0
+      ;;
+    --*) echo "No such option: $1"
+      exit 0
+      ;;
+  esac
+  shift
+done
 
 hasActiveConnections() {
   if [[ $(psql -t -f sql/check_active_connections.sql) ]] ; then
