@@ -14,10 +14,11 @@ echo $__dir
 # Output all standard output to the log file
 exec 2> $__dir/logs/pull.log
 
-PG_PULL_DIR=$1
+REPO_PATH=$1
 DB_NAME=""
 FORCE=""
 INTEGRATION=false
+CLEAR_BRANCH_DATABASES=false
 echo $(date)
 
 if [[ $2 == --force ]]; then
@@ -28,6 +29,11 @@ fi
 if [[ $3 == --integration ]]; then
   echo "Going to setup new DB based on contents of 'sql/integration_setup.sql'"
   INTEGRATION=true
+fi
+
+if [[ $4 == --clear-branch-db ]]; then
+  echo "Going to clear all databases that match git branch names"
+  CLEAR_BRANCH_DATABASES=true
 fi
 
 hasActiveConnections() {
@@ -53,6 +59,19 @@ dropAllPrevDB() {
     do echo "$line" ;
     dropdb $line ;  # FINDME - comment out for testing
     done
+
+  if [ $CLEAR_BRANCH_DATABASES = true ]; then
+    # get all git branch names as an array
+    git_branches=($(git --git-dir=$REPO_PATH/.git branch | sed 's/* //'))
+    # drop all databases that match the git branch names
+    for branch in "${git_branches[@]}"
+    do
+      getAllNames | grep $branch | while read line ; # drop all database created from template
+        do echo "$line" ;
+        dropdb $line ;  # FINDME - comment out for testing
+        done
+    done
+  fi
 }
 
 dropIfDBExists() {
@@ -120,7 +139,7 @@ dropAllPrevDB
 createNew $DB_NAME
 
 echo "Executing command -> bash $DIR postgres://localhost/$DB_NAME --most --force"
-bash $PG_PULL_DIR postgres://localhost/$DB_NAME --most --force & # FINDME - comment out for testing
+bash $REPO_PATH/bin/pg_pull postgres://localhost/$DB_NAME --most --force & # FINDME - comment out for testing
 PULL_PID=$!
 # wait for the pull to finish
 # maybe this will help with the server hang up issue?
