@@ -61,11 +61,6 @@ dropAllPrevDB() {
     dropdb $line ; # FINDME - comment out for testing
     done
 
-  getAllNames | grep 'node_env' | while read line ; # drop all database created from template
-    do echo "$line" ;
-    dropdb $line ;  # FINDME - comment out for testing
-    done
-
   if [ $CLEAR_BRANCH_DATABASES = true ]; then
     # get all git branch names as an array
     git_branches=($(git --git-dir=$REPO_PATH/.git branch | sed 's/* //'))
@@ -183,9 +178,6 @@ if [[ $INTEGRATION=true && -f "$__dir/sql/integration_setup.sql" ]]; then
   echo "Adding integration values to new db"
   psql -d $DB_NAME -f $__dir/sql/integration_setup.sql # FINDME - comment out for testing
 fi
-
-# create new databases with template
-createNew $DB_NAME 'node_env_1'
 
 hasActiveConnections
 
