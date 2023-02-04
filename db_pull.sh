@@ -190,8 +190,15 @@ createNew $DB_NAME 'node_ice'
 # Will need to get the line and add the value after the '='
 sed -i '' "s/TEMPLATE_DATABASE=.*/TEMPLATE_DATABASE=$DB_NAME/g" $REPO_PATH.env.template
 
-# Text me to tell me everything is complete
-# TODO - Transition to creating a applescript notification
-osascript -e "tell application \"Messages\" to send \"Database pull complete, Boss.\nIt's all ready for ya!\" to buddy \"$PHONE\""
-echo "Message should have been sent to $PHONE"
+message="Database pull complete, Boss.\nIt's all ready for ya!"
+if [ -z $PHONE ]; then
+  title="Database Pull Complete"
+  subtitle="Database Pull"
+
+  osascript -e "display notification \"$message\" with title \"$title\" subtitle \"$subtitle\""
+else 
+  # Text me to tell me everything is complete
+  osascript -e "tell application \"Messages\" to send \"$message\" to buddy \"$PHONE\""
+  echo "Message should have been sent to $PHONE"
+fi
 echo "Completed at $(date)"
