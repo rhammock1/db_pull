@@ -188,8 +188,10 @@ dropIfDBExists 'node_ice'
 # In Case of Emergency
 createNew $DB_NAME 'node_ice'
 
-# Will need to get the line and add the value after the '='
+# Update .env.template and .env files with new template database name
 sed -i '' "s/TEMPLATE_DATABASE=.*/TEMPLATE_DATABASE=$DB_NAME/g" $REPO_PATH/.env.template
+sed -i '' "s/TEMPLATE_DATABASE=.*/TEMPLATE_DATABASE=$DB_NAME/g" $REPO_PATH/.env
+
 
 message="Database pull complete, Boss.\nIt's all ready for ya!"
 if [ -z $PHONE ]; then
