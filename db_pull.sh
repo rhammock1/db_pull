@@ -189,7 +189,7 @@ dropIfDBExists 'node_ice'
 createNew $DB_NAME 'node_ice'
 
 # Will need to get the line and add the value after the '='
-sed -i '' "s/TEMPLATE_DATABASE=.*/TEMPLATE_DATABASE=$DB_NAME/g" $REPO_PATH.env.template
+sed -i '' "s/TEMPLATE_DATABASE=.*/TEMPLATE_DATABASE=$DB_NAME/g" $REPO_PATH/.env.template
 
 message="Database pull complete, Boss.\nIt's all ready for ya!"
 if [ -z $PHONE ]; then
