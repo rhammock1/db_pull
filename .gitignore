@@ -1,4 +1,4 @@
 logs/
-sql/clear_prod_payment.sql
-sql/integration_setup.sql
+sql/
+!sql/check_active_connections.sql
 easy_pull.sh

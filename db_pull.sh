@@ -90,29 +90,7 @@ dropIfDBExists() {
   fi
 }
 
-# This function may not be needed anymore with the adoption of CoW databases
-# dropIfTooMany() {
-#   # check if any node db need to be dropped to make room in memory
-#   COUNT_DB=`getAllNames | grep -c -e 'node'`
-#   if [ $COUNT_DB -ge 6 ]; then # counts the number of databases that have names matching node* >= 6
-#     # 6 databases, if you can even have that many, take up too much memory
-#     echo "There are $COUNT_DB databases already created. Getting ready to drop the oldest..."
-#     DB_DROP=`getAllNames | awk 'FNR <= 1'` # gets the first db in list
-#     if [ -z $FORCE ]; then
-#       read -p "About to drop $DB_DROP database. Do you want to drop this database? ('y' to continue) " PROMPT
-#       if [ ! "$PROMPT" = "y" ] ; then
-#         echo "Exiting... "
-#         exit
-#       fi
-#     fi
-#     echo "Dropping $DB_DROP database... "
-#     dropdb $DB_DROP # FINDME - comment out for testing
-#   fi
-# }
-
 createNew() {
-  # dropIfTooMany
-
   if [ $2 ]; then # if 2nd argument, then use 1st as template
     dropIfDBExists $2
     echo "Creating new database named $2 with template $1"
@@ -141,7 +119,7 @@ dropAllPrevDB
 createNew $DB_NAME
 
 echo "Executing command -> bash $DIR postgres://localhost/$DB_NAME --most --force"
-bash $REPO_PATH/bin/pg_pull postgres://localhost/$DB_NAME --most --force & # FINDME - comment out for testing
+bash $REPO_PATH/bin/pg_pull_streaming postgres://localhost/$DB_NAME --most --force & # FINDME - comment out for testing
 PULL_PID=$!
 # wait for the pull to finish
 # maybe this will help with the server hang up issue?
@@ -189,7 +167,6 @@ dropIfDBExists 'node_ice'
 createNew $DB_NAME 'node_ice'
 
 # Update .env.template and .env files with new template database name
-sed -i '' "s/TEMPLATE_DATABASE=.*/TEMPLATE_DATABASE=$DB_NAME/g" $REPO_PATH/.env.template
 sed -i '' "s/TEMPLATE_DATABASE=.*/TEMPLATE_DATABASE=$DB_NAME/g" $REPO_PATH/.env
 
 
