@@ -164,7 +164,21 @@ hasActiveConnections
 dropIfDBExists 'node_ice'
 
 # In Case of Emergency
-createNew $DB_NAME 'node_ice'
+createdb 'node_ice'
+DBID=`psql -t -c "select oid from pg_catalog.pg_database where datname='$DB_NAME'" | xargs`
+
+if [ -z "$TEMPLATE_DBOID" ]
+  then
+    echo "Could not locate an existing database with the name '$TEMPLATE_DBNAME'"
+    exit 3
+fi
+
+NEW_DBOID=`psql -t -c "select oid from pg_catalog.pg_database where datname='node_ice'" | xargs`
+PGDATA=`psql -t -c "SHOW data_directory" | xargs`
+# Clear out the directory of the new database
+rm -rf "$PGDATA/base/$NEW_DBOID"
+# Clone the template database files into the new database directory.
+cp -Rc "$PGDATA/base/$TEMPLATE_DBOID" "$PGDATA/base/$NEW_DBOID"
 
 # Update .env.template and .env files with new template database name
 sed -i '' "s/TEMPLATE_DATABASE=.*/TEMPLATE_DATABASE=$DB_NAME/g" $REPO_PATH/.env
